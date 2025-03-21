@@ -1,0 +1,10 @@
+{
+	"folders": [
+		{
+			"path": "http-gateway"
+		},
+		{
+			"path": "queue-processor"
+		}
+	]
+}
