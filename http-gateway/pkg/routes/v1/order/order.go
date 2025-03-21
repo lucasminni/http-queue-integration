@@ -1,4 +1,4 @@
-package order
+package v1
 
 import (
 	order "http-gateway/internal/domain/models/order"
@@ -8,11 +8,11 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func Register(r *gin.RouterGroup) {
-	r.POST("/order", create)
-	r.GET("/order", list)
-	r.PUT("/order", update)
-	r.DELETE("/order/:id", delete)
+func Register(g *gin.RouterGroup) {
+	g.POST("/order", create)
+	g.GET("/order", list)
+	g.PUT("/order", update)
+	g.DELETE("/order/:id", delete)
 }
 
 func create(ctx *gin.Context) {

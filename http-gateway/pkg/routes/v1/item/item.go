@@ -1,4 +1,4 @@
-package item
+package v1
 
 import (
 	item "http-gateway/internal/domain/models/item"
@@ -8,11 +8,11 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func Register(r *gin.RouterGroup) {
-	r.POST("/item", create)
-	r.GET("/item", list)
-	r.PUT("/item", update)
-	r.DELETE("/item/:id", delete)
+func Register(g *gin.RouterGroup) {
+	g.POST("/item", create)
+	g.GET("/item", list)
+	g.PUT("/item", update)
+	g.DELETE("/item/:id", delete)
 }
 
 func create(ctx *gin.Context) {

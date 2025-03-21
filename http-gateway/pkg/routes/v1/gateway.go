@@ -1,13 +1,13 @@
 package v1
 
 import (
-	"http-gateway/pkg/routes/v1/item"
-	"http-gateway/pkg/routes/v1/order"
+	itemV1 "http-gateway/pkg/routes/v1/item"
+	orderV1 "http-gateway/pkg/routes/v1/order"
 
 	"github.com/gin-gonic/gin"
 )
 
-func Register(r *gin.RouterGroup) {
-	order.Register(r)
-	item.Register(r)
+func Register(g *gin.RouterGroup) {
+	orderV1.Register(g)
+	itemV1.Register(g)
 }
