@@ -1,7 +1,7 @@
 package server
 
 import (
-	"net/http"
+	v1 "http-gateway/pkg/routes/v1"
 
 	"github.com/gin-gonic/gin"
 )
@@ -9,11 +9,7 @@ import (
 func StartHTTPServer() error {
 	r := gin.Default()
 
-	r.GET("/", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{
-			"message": "hello",
-		})
-	})
+	v1.Grouper(r)
 
 	if err := r.Run(); err != nil {
 		return nil
