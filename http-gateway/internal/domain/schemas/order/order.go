@@ -13,8 +13,8 @@ type BodyNewOrder struct {
 }
 
 type BodyUpdateOrder struct {
-	OrderDate  time.Time     `json:"order_date"`
-	Status     string        `json:"status"`
-	Items      []models.Item `json:"items"`
-	TotalPrice float64       `json:"total_price"`
+	OrderDate  time.Time     `json:"new_order_date"`
+	Status     string        `json:"new_status"`
+	Items      []models.Item `json:"new_items_id_list"`
+	TotalPrice float64       `json:"new_total_price"`
 }

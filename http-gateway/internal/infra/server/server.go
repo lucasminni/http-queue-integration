@@ -1,4 +1,4 @@
-package server
+package infra
 
 import (
 	v1 "http-gateway/pkg/routes/v1"

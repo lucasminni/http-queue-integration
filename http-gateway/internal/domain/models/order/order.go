@@ -11,6 +11,6 @@ type Order struct {
 	ID         uuid.UUID     `json:"id"`
 	OrderDate  time.Time     `json:"order_date"`
 	Status     string        `json:"status"`
-	Items      []models.Item `json:"items"`
+	Items      []models.Item `json:"items_id_list"`
 	TotalPrice float64       `json:"total_price"`
 }
