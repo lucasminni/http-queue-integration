@@ -2,15 +2,12 @@ package schemas
 
 import (
 	"time"
+
+	uuid "github.com/google/uuid"
 )
 
-type BodyNewOrder struct {
-	OrderDate  time.Time `json:"order_date"`
-	Status     string    `json:"status"`
-	TotalPrice float64   `json:"total_price"`
-}
-
 type BodyUpdateOrder struct {
+	ID         uuid.UUID `json:"id"`
 	OrderDate  time.Time `json:"new_order_date"`
 	Status     string    `json:"new_status"`
 	TotalPrice float64   `json:"new_total_price"`
