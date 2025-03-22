@@ -1,9 +1,11 @@
 package infra
 
 import (
-	"database/sql"
 	"fmt"
 	"log"
+
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 )
 
 const (
@@ -14,7 +16,7 @@ const (
 	dbname   = "orders"
 )
 
-func StartPostgresDatabase() (*sql.DB, error) {
+func StartPostgresDatabase() error {
 	config := fmt.Sprintf(
 		"host=%s "+
 			"port=%d "+
@@ -29,21 +31,21 @@ func StartPostgresDatabase() (*sql.DB, error) {
 		dbname,
 	)
 
-	db, err := sql.Open("postgres", config)
+	db, err := gorm.Open(postgres.Open(config), &gorm.Config{})
 
 	if err != nil {
 		log.Panic("Error while database start - " + err.Error())
-		return nil, err
+		return nil
 	}
 
-	defer db.Close()
+	sqlDB, _ := db.DB()
 
-	err = db.Ping()
+	err = sqlDB.Ping()
 
 	if err != nil {
 		log.Panic("Database health check failed - " + err.Error())
-		return nil, err
+		return nil
 	}
 
-	return db, nil
+	return nil
 }
