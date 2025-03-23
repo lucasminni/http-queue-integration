@@ -3,6 +3,7 @@ package v1
 import (
 	model "http-gateway/internal/domain/models/order"
 	schema "http-gateway/internal/domain/schemas/order"
+	"http-gateway/internal/domain/services"
 	service "http-gateway/internal/domain/services"
 	"log"
 	"net/http"
@@ -35,7 +36,7 @@ func create(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"message": "error trying to create a new order - " + err.Error(),
 		})
-		log.Println("Binding JSON error - " + err.Error())
+		log.Println("Inserting item error - " + err.Error())
 	} else {
 		ctx.JSON(http.StatusCreated, order)
 	}
@@ -66,7 +67,7 @@ func update(ctx *gin.Context) {
 		log.Println("Binding JSON error - " + err.Error())
 	}
 
-	order, err := service.UpdateOrder(*json)
+	order, err := services.UpdateOrder(*json)
 
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
