@@ -14,6 +14,7 @@ import (
 func Register(g *gin.RouterGroup) {
 	g.POST("/order", create)
 	g.GET("/order", list)
+	g.GET("/order/:id", getById)
 	g.PUT("/order", update)
 	g.DELETE("/order/:id", delete)
 }
@@ -44,6 +45,20 @@ func create(ctx *gin.Context) {
 
 func list(ctx *gin.Context) {
 	orders, err := service.GetOrders()
+
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": "error trying to list the orders - " + err.Error(),
+		})
+		log.Println("Listing orders error - " + err.Error())
+	} else {
+		ctx.JSON(http.StatusOK, orders)
+	}
+}
+
+func getById(ctx *gin.Context) {
+	id := ctx.Param("id")
+	orders, err := service.GetOrderById(id)
 
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{

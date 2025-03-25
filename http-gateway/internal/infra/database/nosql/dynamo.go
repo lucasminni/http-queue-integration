@@ -8,6 +8,8 @@ import (
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
+
+	model "http-gateway/internal/domain/models/order"
 )
 
 const (
@@ -17,10 +19,6 @@ const (
 	AWS_SECRET          = "teste"
 	AWS_token           = "teste"
 )
-
-type IDynamo interface {
-	Insert(table string, item any) error
-}
 
 func CreateSession() (*dynamodb.DynamoDB, error) {
 	newSession, err := session.NewSession(&aws.Config{
@@ -65,6 +63,78 @@ func Insert(table string, item any) error {
 	return nil
 }
 
-func Scan(table string, item any) error {
-	return nil
+func Scan(table string) ([]model.Order, error) {
+	var orders []model.Order
+	var order model.Order
+
+	session, err := CreateSession()
+
+	if err != nil {
+		log.Print("Unable to create a dynamo session")
+		return nil, err
+	}
+
+	items, err := session.Scan(&dynamodb.ScanInput{
+		TableName: aws.String(table),
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	for _, item := range items.Items {
+		err = dynamodbattribute.UnmarshalMap(item, &order)
+		if err != nil {
+			log.Println("Deserializing error: " + err.Error())
+			continue
+		}
+		orders = append(orders, order)
+	}
+
+	if err != nil {
+		return nil, err
+	}
+
+	return orders, nil
+}
+
+func ScanById(table string, id string) ([]model.Order, error) {
+	var orders []model.Order
+	var order model.Order
+
+	session, err := CreateSession()
+
+	if err != nil {
+		log.Print("Unable to create a dynamo session")
+		return nil, err
+	}
+
+	items, err := session.Scan(&dynamodb.ScanInput{
+		TableName:        aws.String(table),
+		FilterExpression: aws.String("id = :id"),
+		ExpressionAttributeValues: map[string]*dynamodb.AttributeValue{
+			":id": {
+				S: aws.String(id),
+			},
+		},
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	for _, item := range items.Items {
+		err = dynamodbattribute.UnmarshalMap(item, &order)
+		if err != nil {
+			log.Println("Deserializing error: " + err.Error())
+			continue
+		}
+		orders = append(orders, order)
+	}
+
+	if err != nil {
+		return nil, err
+	}
+
+	return orders, nil
 }

@@ -20,5 +20,21 @@ func CreateOrder(order model.Order) (*model.Order, error) {
 }
 
 func GetOrders() ([]model.Order, error) {
-	return nil, nil
+	orders, err := nosql.Scan(ORDER_DYNAMO_TABLE)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return orders, nil
+}
+
+func GetOrderById(id string) (*model.Order, error) {
+	orders, err := nosql.ScanById(ORDER_DYNAMO_TABLE, id)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &orders[0], nil
 }

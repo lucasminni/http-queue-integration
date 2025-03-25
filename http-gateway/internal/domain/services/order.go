@@ -18,7 +18,23 @@ func CreateOrder(order model.Order) (*model.Order, error) {
 }
 
 func GetOrders() ([]model.Order, error) {
-	return nil, nil
+	order, err := nosql.GetOrders()
+
+	if err != nil {
+		return nil, err
+	}
+
+	return order, nil
+}
+
+func GetOrderById(id string) (*model.Order, error) {
+	order, err := nosql.GetOrderById(id)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return order, nil
 }
 
 func UpdateOrder(schema.BodyUpdateOrder) (*model.Order, error) {
