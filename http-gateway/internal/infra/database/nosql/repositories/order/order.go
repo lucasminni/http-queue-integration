@@ -1,12 +1,16 @@
-package sql
+package nosql
 
 import (
 	model "http-gateway/internal/domain/models/order"
-	dynamo "http-gateway/internal/infra/database/nosql"
+	"http-gateway/internal/infra/database/nosql"
+)
+
+const (
+	ORDER_DYNAMO_TABLE = "orders"
 )
 
 func CreateOrder(order model.Order) (*model.Order, error) {
-	err := dynamo.Insert("orders", order)
+	err := nosql.Insert(ORDER_DYNAMO_TABLE, order)
 
 	if err != nil {
 		return nil, err

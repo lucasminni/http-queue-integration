@@ -11,28 +11,32 @@ import (
 )
 
 const (
-	region             = "sa-east-1"
-	localstackEndpoint = "https://localhost.localstack.cloud:4566"
-	id                 = "teste"
-	secret             = "teste"
-	token              = "teste"
+	REGION              = "sa-east-1"
+	LOCALSTACK_ENDPOINT = "https://localhost.localstack.cloud:4566"
+	AWS_ID              = "teste"
+	AWS_SECRET          = "teste"
+	AWS_token           = "teste"
 )
 
+type IDynamo interface {
+	Insert(table string, item any) error
+}
+
 func CreateSession() (*dynamodb.DynamoDB, error) {
-	sess, err := session.NewSession(&aws.Config{
-		Region:      aws.String(region),
-		Endpoint:    aws.String(localstackEndpoint),
-		Credentials: credentials.NewStaticCredentials(id, secret, token),
+	newSession, err := session.NewSession(&aws.Config{
+		Region:      aws.String(REGION),
+		Endpoint:    aws.String(LOCALSTACK_ENDPOINT),
+		Credentials: credentials.NewStaticCredentials(AWS_ID, AWS_SECRET, AWS_token),
 	})
 
 	if err != nil {
 		return nil, err
 	}
 
-	return dynamodb.New(sess), nil
+	return dynamodb.New(newSession), nil
 }
 
-func Insert(table string, item interface{}) error {
+func Insert(table string, item any) error {
 	session, err := CreateSession()
 
 	if err != nil {
@@ -52,13 +56,15 @@ func Insert(table string, item interface{}) error {
 		Item:      av,
 	}
 
-	log.Println(input)
-
 	_, err = session.PutItem(input)
 	if err != nil {
 		log.Print("Error trying to insert a new item")
 		return err
 	}
 
+	return nil
+}
+
+func Scan(table string, item any) error {
 	return nil
 }
