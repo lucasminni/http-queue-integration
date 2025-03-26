@@ -14,8 +14,7 @@ func Register(g *gin.RouterGroup) {
 	g.POST("/order", create)
 	g.GET("/order", list)
 	g.GET("/order/:id", getById)
-	g.PUT("/order", update)
-	g.DELETE("/order/:id", delete)
+	g.PUT("/order", updateStatus)
 }
 
 func create(ctx *gin.Context) {
@@ -69,8 +68,8 @@ func getById(ctx *gin.Context) {
 	}
 }
 
-func update(ctx *gin.Context) {
-	json := &schema.BodyUpdateOrder{}
+func updateStatus(ctx *gin.Context) {
+	json := &schema.BodyUpdateOrderStatus{}
 
 	err := ctx.ShouldBindJSON(json)
 
@@ -81,7 +80,7 @@ func update(ctx *gin.Context) {
 		log.Println("Binding JSON error - " + err.Error())
 	}
 
-	order, err := service.UpdateOrder(*json)
+	order, err := service.UpdateOrderStatus(json.ID, json.Status)
 
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
@@ -90,21 +89,5 @@ func update(ctx *gin.Context) {
 		log.Println("Update order error - " + err.Error())
 	} else {
 		ctx.JSON(http.StatusOK, order)
-	}
-}
-
-func delete(ctx *gin.Context) {
-	id := ctx.Param("id")
-
-	err := service.DeleteOrder(id)
-
-	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{
-			"message": "Error trying to delete order - " + err.Error(),
-		})
-	} else {
-		ctx.JSON(http.StatusOK, gin.H{
-			"message": "Order id " + id + " sucessfully deleted",
-		})
 	}
 }

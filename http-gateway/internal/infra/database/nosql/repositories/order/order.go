@@ -38,3 +38,21 @@ func GetOrderById(id string) (*model.Order, error) {
 
 	return &orders[0], nil
 }
+
+func UpdateOrderStatus(id string, status string) (*model.Order, error) {
+	order, err := GetOrderById(id)
+
+	if err != nil {
+		return nil, err
+	}
+
+	updatedOrder := order.SetNewStatus(status)
+
+	err = nosql.Insert(ORDER_DYNAMO_TABLE, updatedOrder)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &updatedOrder, nil
+}

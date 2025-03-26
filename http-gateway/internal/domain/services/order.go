@@ -2,7 +2,6 @@ package services
 
 import (
 	model "http-gateway/internal/domain/models/order"
-	schema "http-gateway/internal/domain/schemas/order"
 	nosql "http-gateway/internal/infra/database/nosql/repositories/order"
 )
 
@@ -37,8 +36,14 @@ func GetOrderById(id string) (*model.Order, error) {
 	return order, nil
 }
 
-func UpdateOrder(schema.BodyUpdateOrder) (*model.Order, error) {
-	return nil, nil
+func UpdateOrderStatus(id string, status string) (*model.Order, error) {
+	updatedOrder, err := nosql.UpdateOrderStatus(id, status)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return updatedOrder, nil
 }
 
 func DeleteOrder(id string) error {

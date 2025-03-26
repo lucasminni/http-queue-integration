@@ -6,6 +6,10 @@ import (
 	uuid "github.com/satori/go.uuid"
 )
 
+const (
+	DDMMYYYY = "02/01/2006"
+)
+
 type Order struct {
 	Id     string    `json:"id"`
 	Date   time.Time `json:"order_date"`
@@ -20,6 +24,10 @@ func (order Order) SetNewOrder() Order {
 		Status: "created",
 		Price:  order.Price,
 	}
+	return order
+}
 
+func (order Order) SetNewStatus(status string) Order {
+	order.Status = status
 	return order
 }
