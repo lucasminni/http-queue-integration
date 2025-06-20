@@ -14,7 +14,7 @@ import (
 
 const (
 	REGION              = "sa-east-1"
-	LOCALSTACK_ENDPOINT = "https://localhost.localstack.cloud:4566"
+	LOCALSTACK_ENDPOINT = "http://localhost.localstack.cloud:4566/"
 	AWS_ID              = "teste"
 	AWS_SECRET          = "teste"
 	AWS_token           = "teste"
