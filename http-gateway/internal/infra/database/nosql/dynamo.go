@@ -14,12 +14,19 @@ import (
 )
 
 var (
-	LOCALSTACK_ENDPOINT = settings.GetEnvs().SetupEnvironment.Mode
+	LOCALSTACK_ENDPOINT = getLocalStackEndpoint()
 	REGION              = settings.GetEnvs().LocalStackEnvironment.LocalStackRegion
 	AWS_ID              = settings.GetEnvs().LocalStackEnvironment.LocalStackAWSId
 	AWS_SECRET          = settings.GetEnvs().LocalStackEnvironment.LocalStackAWSSecret
 	AWS_TOKEN           = settings.GetEnvs().LocalStackEnvironment.LocalStackAWSToken
 )
+
+func getLocalStackEndpoint() string {
+	if settings.GetEnvs().SetupEnvironment.Mode == "debug" {
+		return settings.GetEnvs().LocalStackEnvironment.LocalstackEndpointLocal
+	}
+	return settings.GetEnvs().LocalstackEndpointExternal
+}
 
 func CreateSession() (*dynamodb.DynamoDB, error) {
 	newSession, err := session.NewSession(&aws.Config{

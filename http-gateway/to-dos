@@ -5,3 +5,4 @@
 
 - corrigir response do getOrderById para o quando não existir o item (tá retornando erro 500)
 
+- desassociar o hc da rota v1
