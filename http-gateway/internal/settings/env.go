@@ -2,6 +2,7 @@ package settings
 
 import (
 	"github.com/caarlos0/env/v7"
+	"github.com/joho/godotenv"
 )
 
 var envs Environment
@@ -17,20 +18,20 @@ type DynamoDBEnvironment struct {
 }
 
 type HTTPServerEnvironment struct {
-	HTTPServerPort string `env:"HTTP_SERVER_PORT,required"  envDefault:"8080"`
+	HTTPServerPort string `env:"HTTP_SERVER_PORT,required"`
 }
 
 type LocalStackEnvironment struct {
-	LocalstackEndpointLocal    string `env:"LOCALSTACK_ENDPOINT_LOCAL,required" envDefault:"https://localhost.localstack.cloud:4566"`
-	LocalstackEndpointExternal string `env:"LOCALSTACK_ENDPOINT_EXTERNAL,required" envDefault:"http://localstack:4566"`
-	LocalStackRegion           string `env:"LOCALSTACK_REGION,required" envDefault:"sa-east-1"`
-	LocalStackAWSId            string `env:"LOCALSTACK_AWS_ID,required" envDefault:"teste"`
-	LocalStackAWSSecret        string `env:"LOCALSTACK_AWS_SECRET,required" envDefault:"teste"`
-	LocalStackAWSToken         string `env:"LOCALSTACK_AWS_TOKEN,required" envDefault:"teste"`
+	LocalstackEndpointLocal    string `env:"LOCALSTACK_ENDPOINT_LOCAL,required"`
+	LocalstackEndpointExternal string `env:"LOCALSTACK_ENDPOINT_EXTERNAL,required"`
+	LocalStackRegion           string `env:"LOCALSTACK_REGION,required"`
+	LocalStackAWSId            string `env:"LOCALSTACK_AWS_ID,required"`
+	LocalStackAWSSecret        string `env:"LOCALSTACK_AWS_SECRET,required"`
+	LocalStackAWSToken         string `env:"LOCALSTACK_AWS_TOKEN,required"`
 }
 
 type SetupEnvironment struct {
-	Mode string `env:"MODE,required" envDefault:"debug"`
+	SetupMode string `env:"SETUP_MODE,required"`
 }
 
 func GetEnvs() Environment {
@@ -38,6 +39,8 @@ func GetEnvs() Environment {
 }
 
 func LoadEnvs() error {
+	_ = godotenv.Load(".env")
+
 	if err := env.Parse(&envs); err != nil {
 		return err
 	}

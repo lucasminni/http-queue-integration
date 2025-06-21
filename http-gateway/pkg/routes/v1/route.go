@@ -1,13 +1,16 @@
 package v1
 
 import (
+	"http-gateway/pkg/routes"
 	orderV1 "http-gateway/pkg/routes/v1/order"
 
 	"github.com/gin-gonic/gin"
 )
 
-func Grouper(e *gin.Engine) {
-	api := e.Group("/api")
+func Grouper(r *gin.Engine) {
+	r.GET("/ping", routes.HealthCheck)
+
+	api := r.Group("/api")
 	v1 := api.Group("/v1")
 
 	Register(v1)

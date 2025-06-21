@@ -6,5 +6,8 @@
 		{
 			"path": "queue-processor"
 		}
-	]
+	],
+	"settings": {
+		"makefile.configureOnOpen": false
+	}
 }

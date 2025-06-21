@@ -15,7 +15,6 @@ func Register(g *gin.RouterGroup) {
 	g.GET("/order", list)
 	g.GET("/order/:id", getById)
 	g.PUT("/order", updateStatus)
-	g.GET("/ping", hc)
 }
 
 func create(ctx *gin.Context) {
@@ -91,10 +90,4 @@ func updateStatus(ctx *gin.Context) {
 	} else {
 		ctx.JSON(http.StatusOK, order)
 	}
-}
-
-func hc(ctx *gin.Context) {
-	ctx.JSON(200, gin.H{
-		"message": "pong",
-	})
 }

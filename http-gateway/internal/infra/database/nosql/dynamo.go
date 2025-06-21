@@ -13,26 +13,19 @@ import (
 	"http-gateway/internal/settings"
 )
 
-var (
-	LOCALSTACK_ENDPOINT = getLocalStackEndpoint()
-	REGION              = settings.GetEnvs().LocalStackEnvironment.LocalStackRegion
-	AWS_ID              = settings.GetEnvs().LocalStackEnvironment.LocalStackAWSId
-	AWS_SECRET          = settings.GetEnvs().LocalStackEnvironment.LocalStackAWSSecret
-	AWS_TOKEN           = settings.GetEnvs().LocalStackEnvironment.LocalStackAWSToken
-)
-
 func getLocalStackEndpoint() string {
-	if settings.GetEnvs().SetupEnvironment.Mode == "debug" {
-		return settings.GetEnvs().LocalStackEnvironment.LocalstackEndpointLocal
+	if settings.GetEnvs().SetupMode == "debug" {
+		return settings.GetEnvs().LocalstackEndpointLocal
 	}
 	return settings.GetEnvs().LocalstackEndpointExternal
 }
 
 func CreateSession() (*dynamodb.DynamoDB, error) {
+
 	newSession, err := session.NewSession(&aws.Config{
-		Region:      aws.String(settings.GetEnvs().LocalStackEnvironment.LocalStackRegion),
-		Endpoint:    aws.String(LOCALSTACK_ENDPOINT),
-		Credentials: credentials.NewStaticCredentials(AWS_ID, AWS_SECRET, AWS_TOKEN),
+		Region:      aws.String(settings.GetEnvs().LocalStackRegion),
+		Endpoint:    aws.String(getLocalStackEndpoint()),
+		Credentials: credentials.NewStaticCredentials(settings.GetEnvs().LocalStackAWSId, settings.GetEnvs().LocalStackAWSSecret, settings.GetEnvs().LocalStackAWSToken),
 	})
 
 	if err != nil {

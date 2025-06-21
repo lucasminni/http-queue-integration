@@ -3,16 +3,14 @@ build:
 	docker build -t http-gateway-app .
 
 start:
-	-docker network create gateway-queue-network
-	docker run -d --rm -p 8080:8080 --name http-gateway-app --network gateway-queue-network http-gateway-app 
-	docker ps -a
-
-rebuild:
 	-docker stop http-gateway-app
 	-docker rm http-gateway-app
 	docker build -t http-gateway-app .
-	docker run -d --rm -p 8080:8080 --name http-gateway-app --network gateway-queue-network http-gateway-app 
+	docker run -d --rm -p 8080:8080 --name http-gateway-app --network gateway-queue-network  --env-file ./.env http-gateway-app 
 	docker ps -a
+
+stop:
+	docker stop http-gateway-app	
 
 aws:
 	-docker stop localstack

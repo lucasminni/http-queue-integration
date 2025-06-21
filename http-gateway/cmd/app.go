@@ -10,6 +10,7 @@ var Mode string
 
 func Start() {
 	if err := settings.LoadEnvs(); err != nil {
+		log.Println(settings.GetEnvs().LocalStackAWSSecret)
 		log.Fatal("Error trying to load environment variables")
 	}
 
