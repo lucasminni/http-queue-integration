@@ -1,8 +1,7 @@
-
-- corrigir response do getOrders para uma lista vazia
-
 - corrigir updateOrders que tá todo bugado
 
 - corrigir response do getOrderById para o quando não existir o item (tá retornando erro 500)
 
-- desassociar o hc da rota v1
+- ajustar o comando cli do localstack para subir uma fila sqs
+
+- publicar o pedido numa fila sqs

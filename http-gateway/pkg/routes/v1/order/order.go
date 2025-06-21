@@ -50,7 +50,11 @@ func list(ctx *gin.Context) {
 		})
 		log.Println("Listing orders error - " + err.Error())
 	} else {
-		ctx.JSON(http.StatusOK, orders)
+		if len(orders) == 0 {
+			ctx.JSON(http.StatusOK, []model.Order{})
+		} else {
+			ctx.JSON(http.StatusOK, orders)
+		}
 	}
 }
 
