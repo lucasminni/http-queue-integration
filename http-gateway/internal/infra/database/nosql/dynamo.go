@@ -10,21 +10,22 @@ import (
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
 
 	model "http-gateway/internal/domain/models/order"
+	"http-gateway/internal/settings"
 )
 
-const (
-	REGION              = "sa-east-1"
-	LOCALSTACK_ENDPOINT = "http://localhost.localstack.cloud:4566/"
-	AWS_ID              = "teste"
-	AWS_SECRET          = "teste"
-	AWS_token           = "teste"
+var (
+	LOCALSTACK_ENDPOINT = settings.GetEnvs().SetupEnvironment.Mode
+	REGION              = settings.GetEnvs().LocalStackEnvironment.LocalStackRegion
+	AWS_ID              = settings.GetEnvs().LocalStackEnvironment.LocalStackAWSId
+	AWS_SECRET          = settings.GetEnvs().LocalStackEnvironment.LocalStackAWSSecret
+	AWS_TOKEN           = settings.GetEnvs().LocalStackEnvironment.LocalStackAWSToken
 )
 
 func CreateSession() (*dynamodb.DynamoDB, error) {
 	newSession, err := session.NewSession(&aws.Config{
-		Region:      aws.String(REGION),
+		Region:      aws.String(settings.GetEnvs().LocalStackEnvironment.LocalStackRegion),
 		Endpoint:    aws.String(LOCALSTACK_ENDPOINT),
-		Credentials: credentials.NewStaticCredentials(AWS_ID, AWS_SECRET, AWS_token),
+		Credentials: credentials.NewStaticCredentials(AWS_ID, AWS_SECRET, AWS_TOKEN),
 	})
 
 	if err != nil {

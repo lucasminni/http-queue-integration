@@ -1,28 +1,23 @@
-BUILD_CMD = docker build -t http-gateway-app .
-START_CMD = docker run -d --rm -p 8080:8080 --name http-gateway-app http-gateway-app 
-STOP_CMD = docker stop http-gateway-app
-REMOVE_CMD = docker rm http-gateway-app
-
-
 build:
-	-$(REMOVE_CMD)
-	$(BUILD_CMD)
+	-docker rm http-gateway-app
+	docker build -t http-gateway-app .
 
 start:
-	$(START_CMD)
+	-docker network create gateway-queue-network
+	docker run -d --rm -p 8080:8080 --name http-gateway-app --network gateway-queue-network http-gateway-app 
 	docker ps -a
 
 rebuild:
-	-$(STOP_CMD)
-	-$(REMOVE_CMD)
-	$(BUILD_CMD)
-	$(START_CMD)
+	-docker stop http-gateway-app
+	-docker rm http-gateway-app
+	docker build -t http-gateway-app .
+	docker run -d --rm -p 8080:8080 --name http-gateway-app --network gateway-queue-network http-gateway-app 
 	docker ps -a
 
-localstack:
-	@echo "Iniciando Localstack e configurando AWS CLI"
-	localstack start -d
+aws:
+	-docker stop localstack
+	-docker rm localstack
+	docker run -d --rm --name localstack --network gateway-queue-network -p 4566:4566 -e SERVICES=dynamodb localstack/localstack
 	-aws configure --profile minni perfilkey: teste secret: teste token: secret region: sa-east-1 format: json
 	aws configure list
-	@echo Criando tabela orders no DynamoDB Local
 	aws --no-cli-pager --endpoint-url=https://localhost.localstack.cloud:4566 --profile minni dynamodb create-table --table-name orders --attribute-definitions AttributeName=id,AttributeType=S --key-schema AttributeName=id,KeyType=HASH --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5
