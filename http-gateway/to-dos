@@ -1,7 +1,8 @@
-- corrigir updateOrders que tá todo bugado
+- criar endpoint delete by id
 
-- corrigir response do getOrderById para o quando não existir o item (tá retornando erro 500)
+- criar endpoint delete passndo uma lista
 
 - ajustar o comando cli do localstack para subir uma fila sqs
 
 - publicar o pedido numa fila sqs
+

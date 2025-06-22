@@ -1,7 +1,6 @@
 package v1
 
 import (
-	model "http-gateway/internal/domain/models/order"
 	schema "http-gateway/internal/domain/schemas/order"
 	service "http-gateway/internal/domain/services"
 	"log"
@@ -18,7 +17,7 @@ func Register(g *gin.RouterGroup) {
 }
 
 func create(ctx *gin.Context) {
-	json := &model.Order{}
+	json := &schema.BodyNewOrder{}
 
 	err := ctx.ShouldBindJSON(json)
 
@@ -29,7 +28,7 @@ func create(ctx *gin.Context) {
 		log.Println("Binding JSON error - " + err.Error())
 	}
 
-	order, err := service.CreateOrder(*json)
+	order, err := service.CreateOrder(json.Price)
 
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
@@ -51,7 +50,7 @@ func list(ctx *gin.Context) {
 		log.Println("Listing orders error - " + err.Error())
 	} else {
 		if len(orders) == 0 {
-			ctx.JSON(http.StatusOK, []model.Order{})
+			ctx.JSON(http.StatusNotFound, "No orders found in the database")
 		} else {
 			ctx.JSON(http.StatusOK, orders)
 		}
@@ -60,7 +59,7 @@ func list(ctx *gin.Context) {
 
 func getById(ctx *gin.Context) {
 	id := ctx.Param("id")
-	orders, err := service.GetOrderById(id)
+	order, err := service.GetOrderById(id)
 
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
@@ -68,7 +67,11 @@ func getById(ctx *gin.Context) {
 		})
 		log.Println("Listing orders error - " + err.Error())
 	} else {
-		ctx.JSON(http.StatusOK, orders)
+		if order == nil {
+			ctx.JSON(http.StatusNotFound, "No order found with the given ID: "+id)
+		} else {
+			ctx.JSON(http.StatusOK, order)
+		}
 	}
 }
 
@@ -79,7 +82,7 @@ func updateStatus(ctx *gin.Context) {
 
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
-			"message": "Unable to update the order due to error " + err.Error(),
+			"message": "Unable to update the order due to error - " + err.Error(),
 		})
 		log.Println("Binding JSON error - " + err.Error())
 	}

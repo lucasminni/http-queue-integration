@@ -5,8 +5,9 @@ import (
 	nosql "http-gateway/internal/infra/database/nosql/repositories/order"
 )
 
-func CreateOrder(order model.Order) (*model.Order, error) {
-	order = model.Order.SetNewOrder(order)
+func CreateOrder(price float64) (*model.Order, error) {
+	order := model.Order{}
+	order = order.SetNewOrder(price)
 	result, err := nosql.CreateOrder(order)
 
 	if err != nil {

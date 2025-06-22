@@ -17,12 +17,12 @@ type Order struct {
 	Price  float64   `json:"total_price"`
 }
 
-func (order Order) SetNewOrder() Order {
+func (order Order) SetNewOrder(price float64) Order {
 	order = Order{
 		Id:     uuid.NewV4().String(),
 		Date:   time.Now(),
 		Status: "created",
-		Price:  order.Price,
+		Price:  price,
 	}
 	return order
 }

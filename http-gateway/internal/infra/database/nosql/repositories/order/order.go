@@ -36,6 +36,10 @@ func GetOrderById(id string) (*model.Order, error) {
 		return nil, err
 	}
 
+	if len(orders) == 0 {
+		return nil, nil
+	}
+
 	return &orders[0], nil
 }
 
