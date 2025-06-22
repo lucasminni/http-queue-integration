@@ -139,3 +139,29 @@ func ScanById(table string, id string) ([]model.Order, error) {
 
 	return orders, nil
 }
+
+func Delete(table string, id string) error {
+	session, err := CreateSession()
+
+	if err != nil {
+		log.Print("Unable to create a dynamo session")
+		return err
+	}
+
+	input := &dynamodb.DeleteItemInput{
+		TableName: aws.String(table),
+		Key: map[string]*dynamodb.AttributeValue{
+			"id": {
+				S: aws.String(id),
+			},
+		},
+	}
+
+	_, err = session.DeleteItem(input)
+	if err != nil {
+		log.Print("Error trying to delete an item")
+		return err
+	}
+
+	return nil
+}

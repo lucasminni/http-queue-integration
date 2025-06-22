@@ -8,3 +8,7 @@ type BodyUpdateOrderStatus struct {
 type BodyNewOrder struct {
 	Price float64 `json:"total_price"`
 }
+
+type BodyDeleteOrderList struct {
+	IDList []string `json:"ids"`
+}

@@ -48,5 +48,19 @@ func UpdateOrderStatus(id string, status string) (*model.Order, error) {
 }
 
 func DeleteOrder(id string) error {
+
+	if err := nosql.DeleteOrder(id); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func DeleteOderByIdList(ids []string) error {
+
+	if err := nosql.DeleteOrderByIdList(ids); err != nil {
+		return err
+	}
+
 	return nil
 }

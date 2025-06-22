@@ -3,6 +3,7 @@ package nosql
 import (
 	model "http-gateway/internal/domain/models/order"
 	"http-gateway/internal/infra/database/nosql"
+	"log"
 )
 
 const (
@@ -59,4 +60,33 @@ func UpdateOrderStatus(id string, status string) (*model.Order, error) {
 	}
 
 	return &updatedOrder, nil
+}
+
+func DeleteOrder(id string) error {
+
+	_, err := GetOrderById(id)
+
+	if err != nil {
+		log.Println("The order with ID " + id + " does not exist in the database.")
+		return err
+	}
+
+	err = nosql.Delete(ORDER_DYNAMO_TABLE, id)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func DeleteOrderByIdList(ids []string) error {
+	for _, id := range ids {
+		err := DeleteOrder(id)
+		if err != nil {
+			log.Println("Error deleting order with ID " + id + ": " + err.Error())
+			return err
+		}
+	}
+	return nil
 }
