@@ -6,10 +6,6 @@ import (
 	uuid "github.com/satori/go.uuid"
 )
 
-const (
-	DDMMYYYY = "02/01/2006"
-)
-
 type Order struct {
 	Id     string    `json:"id"`
 	Date   time.Time `json:"order_date"`

@@ -3,12 +3,11 @@ package nosql
 import (
 	model "http-gateway/internal/domain/models/order"
 	"http-gateway/internal/infra/database/nosql"
+	"http-gateway/internal/settings"
 	"log"
 )
 
-const (
-	ORDER_DYNAMO_TABLE = "orders"
-)
+var ORDER_DYNAMO_TABLE = settings.GetEnvs().OrderDynamoTable
 
 func CreateOrder(order model.Order) (*model.Order, error) {
 	err := nosql.Insert(ORDER_DYNAMO_TABLE, order)

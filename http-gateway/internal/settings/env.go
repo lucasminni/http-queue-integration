@@ -15,6 +15,7 @@ type Environment struct {
 }
 
 type DynamoDBEnvironment struct {
+	OrderDynamoTable string `env:"ORDER_DYNAMO_TABLE,required"`
 }
 
 type HTTPServerEnvironment struct {
